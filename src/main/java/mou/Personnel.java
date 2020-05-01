@@ -7,19 +7,21 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public final class Personnel implements Composant, Serializable{
+	 private final int id;
 	private final String  nom;
 	private final String prenom;
 	private final java.time.LocalDate dateNaissance;
 	private final ArrayList<telephone> numTelephone;
 
 	public static class Builder {
+		 private final int id;
 		private final String  nom;
 		private final String prenom;
 		private final java.time.LocalDate dateNaissance;
 		private ArrayList<telephone> numTelephone;
 		
-		public Builder(final String nom, final String prenom, final java.time.LocalDate dateNaissance, final telephone num) {
-			
+		public Builder(final int id, final String nom, final String prenom, final java.time.LocalDate dateNaissance, final telephone num) {
+			this.id=id;
 			this.nom = nom;
 			this.prenom = prenom;
 			this.dateNaissance = dateNaissance;
@@ -45,6 +47,7 @@ public final class Personnel implements Composant, Serializable{
 	
 	
 	private Personnel(final Builder builder) {
+		id=builder.id;
 		nom = builder.nom;
 		prenom = builder.prenom;
 		dateNaissance = builder.dateNaissance;
@@ -56,6 +59,9 @@ public final class Personnel implements Composant, Serializable{
 		return null;
 	}
 	
+	public int getid() {
+		return id;
+	}
 	   public String getNom() {
 	        return nom;
 	    }
