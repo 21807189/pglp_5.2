@@ -1,70 +1,141 @@
 package DAO;
 
-import java.io.*;
-
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import mou.Groupe;
 
 public class GroupeDAO extends DAO<Groupe> {
+    
+    private String dossier;
 
+    public GroupeDAO(final String dossierDB) {
+        dossier = dossierDB + "Groupe\\";
+    }
 
-    public GroupeDAO(String dossierDB) {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-    public Groupe create(Groupe obj) {
-        try(ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream("groupe")))) {
-            out.writeObject(obj);
+    @Override
+    public Groupe create(final Groupe obj) {
+        String chemin = dossier;
+        if (!new File(chemin).exists()) {
+            if (!new File(chemin).mkdirs()) {
+                return null;
+            }
         }
-        catch(IOException ioe){
-
+        chemin += obj.getId() + ".ser";
+        File f = new File(chemin);
+        if (f.exists()) {
+            return null;
+        }
+        try {
+            serialize(obj, chemin);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
         return obj;
     }
 
     @Override
-    public Groupe find(String nom) {
-        Groupe g = new Groupe("Vide");
-        try(ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(nom)))) {
-            g = (Groupe) in.readObject();
-
-        }
-        catch(ClassNotFoundException | IOException e){
-            e.printStackTrace();
+    public Groupe find(final String id) {
+        String nomFichier = dossier + id + ".ser";
+        try {
+            Groupe g = deserialize(nomFichier);
+            if (!id.equals(g.getId() + "")) {
+                return null;
+            } else {
+                return g;
             }
-
-        return g;
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
-    public void delete(String file) {
+    public Groupe update(final Groupe obj) {
+        String nomFichier = dossier + obj.getId() + ".ser";
+        File f;
+        f = new File(nomFichier);
+        if (!f.exists()) {
+            System.err.println("Le groupe n'existe pas, impossible de modifier.");
+            return null;
+        }
+        Groupe g;
+        try {
+            g = deserialize(nomFichier);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (obj.getId() != g.getId()) {
+            return null;
+        }
 
         try {
-            File f = new File(file);
-
-            if (f.delete()) {
-                System.out.println("supprimé ");
-            } else {
-                System.out.println("erreur");
-            }
-        }
-        catch (Exception e){
+            serialize(obj, nomFichier);
+        } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-
-
+        return obj;
     }
 
-	@Override
-	public Groupe update(Groupe obj) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void delete(final Groupe obj) {
+        String nomFichier = dossier + obj.getId() + ".ser";
+        File f;
+        f = new File(nomFichier);
+        if (!f.exists()) {
+            System.err.println("Impossible de supprimer, le groupe n'existe pas");
+            return;
+        }
+        Groupe g;
+        try {
+            g = deserialize(nomFichier);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (obj.getId() != g.getId()) {
+            return;
+        }
+        if (!obj.equals(g)) {
+            return;
+        }
+        if (f.delete()) {
+            System.out.println("Groupe supprimé.");
+        } else {
+            System.err.println("erreur, groupe non supprimé.");
+        }
+    }
 
-	@Override
-	public void delete(Groupe obj) {
-		// TODO Auto-generated method stub
-		
-	}
+   
+    private void serialize(final Groupe g, final String nomFichier)
+            throws FileNotFoundException, IOException {
+        try (ObjectOutputStream out =
+                new ObjectOutputStream(new BufferedOutputStream(
+                        new FileOutputStream(new File(nomFichier))))) {
+            out.writeObject(g);
+        }
+    }
+
+    private Groupe deserialize(final String nomFichier)
+            throws FileNotFoundException, IOException, ClassNotFoundException {
+        try (ObjectInputStream in =
+                new ObjectInputStream(new BufferedInputStream(
+                        new FileInputStream(new File(nomFichier))))) {
+            Object o = in.readObject();
+            if (o instanceof Groupe) {
+                return (Groupe) o;
+            }
+        }
+        return null;
+    }
 }

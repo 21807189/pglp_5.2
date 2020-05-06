@@ -4,36 +4,60 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Groupe implements Composant, IterableComposant, Serializable {
-    
+   
+    private final int id;   
     private String nom;
-    
-    private ArrayList<Composant> per_groupe;
+    private ArrayList<Composant> composantFils;
 
-    
-    public Groupe(final String grp) {
-        this.nom = grp;
-        per_groupe = new ArrayList<Composant>();
+    public Groupe(final int i, final String n) {
+        this.id = i;
+        this.nom = n;
+        composantFils = new ArrayList<Composant>();
     }
 
+   
     public void add(final Composant c) {
-    	per_groupe.add(c);
+        composantFils.add(c);
     }
 
-    
+   
+    public Composant get(final int index) {
+        return composantFils.get(index);
+    }
+
+   
+    public String getNom() {
+        return this.nom;
+    }
+
+   
+    public int getId() {
+        return id;
+    }
+
+   
+    public Composant remove(final int index) {
+        return composantFils.remove(index);
+    }
+
+  
     @Override
     public int hashCode() {
-        final int prime = 17;
+        final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((per_groupe == null) ? 0 : per_groupe.hashCode());
-        result = prime * result
-                + ((nom == null) ? 0 : nom.hashCode());
+                + ((composantFils == null) ? 0 : composantFils.hashCode());
+        result = prime * result + ((nom == null) ? 0 : nom.hashCode());
         return result;
     }
 
+    public int size() {
+        return composantFils.size();
+    }
+
     public ArrayList<String> hierarchie() {
-        ArrayList<String> liste = new ArrayList<String>();
-        liste.add(this.toString());
+        ArrayList<String> list = new ArrayList<String>();
+        list.add(this.toString());
         IterateurComposant ite = this.iterateur();
         Composant c;
         while (ite.hasNext()) {
@@ -44,21 +68,19 @@ public class Groupe implements Composant, IterableComposant, Serializable {
                 } else {
                     s = "\t|-   " + s;
                 }
-                liste.add(s);
+                list.add(s);
             }
         }
-        return liste;
+        return list;
     }
 
-    
     public String toString() {
-        return "Groupe " + this.nom + " (" + this.per_groupe.size() + ")";
+        return "Groupe " + this.nom + " (" + this.composantFils.size() + ")";
     }
 
-   
     public IterateurComposant iterateur() {
-        IterateurComposant mou = new IterateurComposant(this.per_groupe);
-        return mou;
+        IterateurComposant ite = new IterateurComposant(this.composantFils);
+        return ite;
     }
 
 }
