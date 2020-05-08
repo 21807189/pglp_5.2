@@ -5,49 +5,63 @@ import java.util.ArrayList;
 
 
 public class Annuaire implements Serializable {
-   
+
+    private final int id;
     private Composant racine;
 
-    public Annuaire(final Composant r) {
+    public Annuaire(final int i, final Composant r) {
+        this.id = i;
         this.racine = r;
     }
 
     public String hierachie() {
         String s = "";
-        ArrayList<String> liste = racine.hierarchie();
-        for (String str : liste) {
+        ArrayList<String> list = racine.hierarchie();
+        for (String str : list) {
             s = s.concat(str + "\n");
         }
         return s;
     }
 
     public String groupe() {
-        ArrayList<Composant> mou = new ArrayList<Composant>();
-        ArrayList<Composant> hou = new ArrayList<Composant>();
-        hou.add(racine);
+        ArrayList<Composant> aTraiter = new ArrayList<Composant>();
+        ArrayList<Composant> aTraiterSuiv = new ArrayList<Composant>();
+        aTraiterSuiv.add(racine);
         Composant c;
         String s = "";
-        while (!mou.isEmpty() || !hou.isEmpty()) {
-            if (mou.isEmpty()) {
-                mou.addAll(hou);
-                hou.clear();
+        while (!aTraiter.isEmpty() || !aTraiterSuiv.isEmpty()) {
+            if (aTraiter.isEmpty()) {
+                aTraiter.addAll(aTraiterSuiv);
+                aTraiterSuiv.clear();
                 s = s.concat("---\n");
             }
-            c = mou.remove(0);
+            c = aTraiter.remove(0);
             s = s.concat(c.toString() + "\n");
             if (c instanceof IterableComposant) {
-                IterateurComposant ite  = ((IterableComposant) c).iterateur();
+                IterateurComposant ite = ((IterableComposant) c).iterateur();
                 while (ite.hasNext()) {
-                	hou.add(ite.next());
+                    aTraiterSuiv.add(ite.next());
                 }
             }
         }
         return s;
     }
 
-	public static Annuaire getInstance() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 25;
+        int result = 1;
+        result = prime * result + ((racine == null) ? 0 : racine.hashCode());
+        return result;
+    }
+
+   
+    public int getId() {
+        return id;
+    }
+    
+    public Composant getRacine() {
+        return racine;
+    }
 
 }
