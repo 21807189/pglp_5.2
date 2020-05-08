@@ -10,37 +10,37 @@ public class PersonnelTest {
 
     @Test
     public void constructeurTestA() {
-        Personnel p = new Personnel.Builder("hou", "mou",
+        Personnel p = new Personnel.Builder(1,"hou", "mou",
                 LocalDate.of(1900,01,01),
-                new telephone("0700000001", "portable")).build();
+                new telephone(1,"0700000001", "portable")).build();
         assertEquals("hou", p.getNom());
         assertEquals("mou", p.getPrenom());
         assertEquals(LocalDate.of(1900,01,01), p.getDateNaissance());
 
-        assertEquals(1, p.getnumTelephone().size());
-        assertEquals(new telephone("0700000001", "portable"),
-                p.getnumTelephone().get(0));
+        assertEquals(1, p.getNumeros().size());
+        assertEquals(new telephone(1,"0700000001", "portable"),
+                p.getNumeros().get(0));
     }
 /**
- * *teste de constructeur personnel avec 2 num p et f
+ * *teste de constructeur personnel avec 2 num portable et fixe
  */
     
     @Test
     public void constructeurTestB() {
-        Personnel p = new Personnel.Builder("hou", "mou",
+        Personnel p = new Personnel.Builder(1,"hou", "mou",
                 LocalDate.of(1900,01,01),
-                new telephone("0700000002", "portable"))
-                        .addnumTelephone(new telephone("0900000001", "fixe"))
+                new telephone(1,"0700000002", "portable"))
+                        .addNumero(new telephone(1,"0900000001", "fixe"))
                         .build();
         assertEquals("hou", p.getNom());
         assertEquals("mou", p.getPrenom());
         assertEquals(LocalDate.of(1900,01,01), p.getDateNaissance());
        
 
-        assertEquals(2, p.getnumTelephone().size());
-        assertEquals(new telephone("0900000001", "fixe"), p.getnumTelephone().get(1));
-        assertEquals(new telephone("0700000002", "portable"),
-                p.getnumTelephone().get(0));
+        assertEquals(2, p.getNumeros().size());
+        assertEquals(new telephone(1,"0900000001", "fixe"), p.getNumeros().get(1));
+        assertEquals(new telephone(1,"0700000002", "portable"),
+                p.getNumeros().get(0));
     }
 
     /**
@@ -50,16 +50,16 @@ public class PersonnelTest {
      */
     @Test
     public void constructeurTestC() {
-        Personnel p = new Personnel.Builder("houssein", "mou",
+        Personnel p = new Personnel.Builder(10,"houssein", "mou",
                 LocalDate.of(1900,01,01),
-                new telephone("0700000001", "portable")).build();
+                new telephone(10,"0700000001", "portable")).build();
         assertEquals("hou", p.getNom());
         assertEquals("mou", p.getPrenom());
         assertEquals(LocalDate.of(1900,01,01), p.getDateNaissance());
 
-        assertEquals(1, p.getnumTelephone().size());
-        assertEquals(new telephone("0700000001", "portable"),
-                p.getnumTelephone().get(0));
+        assertEquals(1, p.getNumeros().size());
+        assertEquals(new telephone(10,"0700000001", "portable"),
+                p.getNumeros().get(0));
     }
     
 /**
@@ -69,20 +69,22 @@ public class PersonnelTest {
  */
     @Test
     public void constructeurTestD() {
-        Personnel p = new Personnel.Builder("hou", "mou",
+        Personnel p = new Personnel.Builder(2,"hou", "mou",
                 LocalDate.of(1900,01,01),
-                new telephone("0700000023", "portable"))
-                        .addnumTelephone(new telephone("0900000001", "fixe"))
+                new telephone(2,"0700000023", "portable"))
+                        .addNumero(new telephone(2,"0900000001", "fixe"))
                         .build();
         assertEquals("hou", p.getNom());
         assertEquals("mou", p.getPrenom());
         assertEquals(LocalDate.of(1900,01,01), p.getDateNaissance());
        
 
-        assertEquals(2, p.getnumTelephone().size());
-        assertEquals(new telephone("0900000001", "fixe"), p.getnumTelephone().get(1));
-        assertEquals(new telephone("0700000002", "portable"),
-                p.getnumTelephone().get(0));
+        assertEquals(2, p.getNumeros().size());
+        
+        assertEquals(new telephone(2,"0900000001", "fixe"), p.getNumeros().get(1));
+        
+        assertEquals(new telephone(2,"0700000002", "portable"),
+                p.getNumeros().get(0));
     }
 
    
