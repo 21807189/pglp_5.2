@@ -145,7 +145,7 @@ public class TelephoneDAOJDBC extends DAO<telephone> {
         }
         return null;
     }
-    /*static void updateAll(final List<telephone> list, final Connection conn)
+    static void updateAll(final List<telephone> list, final Connection conn)
             throws SQLException {
 
         try (PreparedStatement selectTelephone =
@@ -171,7 +171,7 @@ public class TelephoneDAOJDBC extends DAO<telephone> {
          }
             
         }
-    }*/
+    }
 
     
     @Override
