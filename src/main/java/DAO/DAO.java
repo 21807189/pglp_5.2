@@ -1,9 +1,11 @@
 package DAO;
 
+import mou.telephone;
+
 public abstract class DAO<T> {
 
     public abstract T create(T obj);
-
+ 
     public abstract T find(String id);
 
     

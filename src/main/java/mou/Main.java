@@ -5,12 +5,12 @@ import java.time.LocalDate;
 import DAO.*;
 
 
-public final class Main {
+public enum Main {
 	
-	private Main() {
+	Main; {
 	}
 	
-    public static void main(final String[] args) {
+    public void run(){
     	  Personnel p1 = new Personnel.Builder(1,"mou", "hou",
                   LocalDate.of(2000, 01, 05),
                   new telephone(1,"07000000", "portable"))
@@ -58,7 +58,8 @@ public final class Main {
     public void runJDBCTelephone() {
         DAO<telephone> dao = FabriqueDAO.getFabriqueDAO(FabriqueDAO.TypeDAO.mouwafak).getTelephoneDAO();
         telephone t1 = new telephone(1, "0700000001", "portable");
-        System.out.println("Telephone : " + t1.toString());
+        System.out.println("telephone : " + t1.toString());
+
         dao.create(t1);
 
         telephone t2 = dao.find("1");
@@ -214,7 +215,17 @@ public final class Main {
         System.out.println("Delete ? ");
         System.out.println(a2 == null);
     }
-
+/**
+ * les differents run
+ * @param args
+ */
+    public static void main(final String[] args) {
+        // Main.run();
+       //  Main.runJDBCTelephone();
+       //  Main.runJDBCPersonnel();
+       // Main.runJDBCGroupe();
+         Main.runJDBCAnnuaire();
+    }
     
 }
 

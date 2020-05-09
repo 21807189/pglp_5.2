@@ -123,4 +123,17 @@ public class PersonnelDAOteste {
         assertFalse(f.exists());
     }
 
+
+    private Personnel deserialize(final String nomFichier)
+            throws FileNotFoundException, IOException, ClassNotFoundException {
+        try (ObjectInputStream in =
+                new ObjectInputStream(new BufferedInputStream(
+                        new FileInputStream(new File(nomFichier))))) {
+            Object o = in.readObject();
+            if (o instanceof Personnel) {
+                return (Personnel) o;
+            }
+        }
+        return null;
+    }
 }
