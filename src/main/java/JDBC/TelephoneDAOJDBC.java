@@ -109,7 +109,7 @@ public class TelephoneDAOJDBC extends DAO<telephone> {
                 conn.prepareStatement("SELECT * FROM telephone WHERE id = ?")) {
             for (int i : id) {
                 try {
-                	
+                	 selectTelephone.setInt(1, i);
                     try (ResultSet rs = selectTelephone.executeQuery()) {
                         if (rs.next()) {
                             telephones.add(new telephone(rs.getInt("id"),
@@ -118,7 +118,7 @@ public class TelephoneDAOJDBC extends DAO<telephone> {
                         }
                     }
                 } catch (DerbySQLIntegrityConstraintViolationException e) {
-                	
+                	System.err.println(e.getMessage());
                 }
             }
         }
@@ -129,6 +129,7 @@ public class TelephoneDAOJDBC extends DAO<telephone> {
     public telephone find(final String id) {
         try (PreparedStatement selectTelephone = connection
                 .prepareStatement("SELECT * FROM telephone WHERE id = ?")) {
+            selectTelephone.setInt(1, Integer.parseInt(id));
         	
             try (ResultSet rs = selectTelephone.executeQuery()) {
                 if (rs != null && rs.next()) {
@@ -190,6 +191,7 @@ public class TelephoneDAOJDBC extends DAO<telephone> {
             updateTelephone.setInt(3, obj.getId());
             updateTelephone.execute();
             connection.commit();
+            updated = obj;
             
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -228,6 +230,7 @@ public class TelephoneDAOJDBC extends DAO<telephone> {
                 deleteTelephone.setInt(1, obj.getId());
                 deleteTelephone.execute();
             }
+            connection.commit();
             
             System.out.println("Telephone " + obj.getId() + " supprimé.");
         } catch (SQLException e) {
